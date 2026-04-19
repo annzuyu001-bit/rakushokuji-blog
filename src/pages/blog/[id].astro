@@ -26,9 +26,75 @@ const { post } = Astro.props as { post: Blog };
       .eyecatch { width: 100%; border-radius: 12px; margin-bottom: 2rem; object-fit: cover; max-height: 400px; }
       .title { font-size: 1.8rem; color: #333; line-height: 1.4; margin-bottom: 0.5rem; }
       .date { color: #999; font-size: 0.85rem; margin-bottom: 2rem; }
-      .content { line-height: 1.9; color: #444; }
-      .content img { max-width: 100%; border-radius: 8px; }
       .back { display: inline-block; margin-top: 2rem; color: #e67e22; text-decoration: none; }
+
+      /* ── 記事本文（set:html のため :global() 必須） ── */
+      :global(.content) { line-height: 1.9; color: #444; font-size: 1rem; }
+      :global(.content p) { margin: 1em 0; }
+      :global(.content img) { max-width: 100%; border-radius: 8px; display: block; margin: 1.5em auto; }
+
+      /* 見出し */
+      :global(.content h2) {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin: 2.5em 0 1em;
+        padding: 0.55em 0.9em;
+        background: #fff5ee;
+        border-left: 5px solid #e67e22;
+        border-radius: 0 6px 6px 0;
+        color: #333;
+      }
+      :global(.content h3) {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 2em 0 0.8em;
+        padding: 0.4em 0 0.4em 0.8em;
+        border-left: 3px solid #e67e22;
+        color: #444;
+      }
+      :global(.content h4) {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 1.5em 0 0.5em;
+        color: #555;
+      }
+
+      /* リスト */
+      :global(.content ul) { margin: 1em 0 1em 0.5em; padding: 0; list-style: none; }
+      :global(.content ul li) { position: relative; padding-left: 1.5em; margin-bottom: 0.5em; }
+      :global(.content ul li::before) {
+        content: "✔";
+        position: absolute;
+        left: 0;
+        color: #e67e22;
+        font-size: 0.85em;
+        top: 0.15em;
+      }
+      :global(.content ol) { margin: 1em 0 1em 1.8em; }
+      :global(.content ol li) { margin-bottom: 0.5em; }
+
+      /* 引用（Twitterなど） */
+      :global(.content blockquote) {
+        margin: 1.5em 0;
+        padding: 1em 1.2em;
+        background: #f9f9f9;
+        border-left: 4px solid #ccc;
+        border-radius: 4px;
+        color: #555;
+        font-size: 0.95em;
+      }
+      :global(.content blockquote p) { margin: 0.4em 0; }
+
+      /* テーブル */
+      :global(.content table) { width: 100%; border-collapse: collapse; margin: 1.5em 0; font-size: 0.95em; }
+      :global(.content th) { background: #e67e22; color: #fff; padding: 0.6em 0.9em; text-align: left; font-weight: 700; }
+      :global(.content td) { padding: 0.6em 0.9em; border-bottom: 1px solid #eee; vertical-align: top; }
+      :global(.content tr:nth-child(even) td) { background: #fdf8f4; }
+
+      /* リンク・強調 */
+      :global(.content a) { color: #e67e22; text-decoration: underline; }
+      :global(.content a:hover) { opacity: 0.75; }
+      :global(.content strong) { color: #c0392b; font-weight: 700; }
     </style>
   </head>
   <body>
