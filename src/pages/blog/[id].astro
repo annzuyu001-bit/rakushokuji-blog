@@ -1,0 +1,45 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { client } from '../../lib/microcms';
+import type { Blog } from '../../lib/microcms';
+
+export async function getStaticPaths() {
+  const data = await client.getList<Blog>({ endpoint: 'blogs', queries: { limit: 100 } });
+  return data.contents.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: Blog };
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <BaseHead title={`${post.title} | ${SITE_TITLE}`} description={post.title} />
+    <style>
+      main { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+      .eyecatch { width: 100%; border-radius: 12px; margin-bottom: 2rem; object-fit: cover; max-height: 400px; }
+      .title { font-size: 1.8rem; color: #333; line-height: 1.4; margin-bottom: 0.5rem; }
+      .date { color: #999; font-size: 0.85rem; margin-bottom: 2rem; }
+      .content { line-height: 1.9; color: #444; }
+      .content img { max-width: 100%; border-radius: 8px; }
+      .back { display: inline-block; margin-top: 2rem; color: #e67e22; text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      {post.eyecatch && <img class="eyecatch" src={post.eyecatch.url} alt={post.title} />}
+      <h1 class="title">{post.title}</h1>
+      <p class="date">{new Date(post.publishedAt).toLocaleDateString('ja-JP')}</p>
+      <div class="content" set:html={post.content} />
+      <a class="back" href="/blog">← 記事一覧へ戻る</a>
+    </main>
+    <Footer />
+  </body>
+</html>
