@@ -1,117 +1,256 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ArticleCard from '../components/ArticleCard.astro';
 import { client } from '../lib/microcms';
 import type { Blog } from '../lib/microcms';
 
 const data = await client.getList<Blog>({ endpoint: 'blogs', queries: { limit: 3 } });
-const latestPosts = data.contents;
+const posts = data.contents;
 
-const features = [
-  { icon: '🕐', title: '時短・忙しい日でも安心', body: '献立を考えてスーパーへ行く手間がゼロに。疲れた日でも栄養バランスの整った食事がすぐ手に入ります。', color: 'orange' },
-  { icon: '🥗', title: '栄養バランスを正直比較', body: '糖質・塩分・カロリーなど各サービスの栄養面を数値付きで比較。健康管理中の方にも役立つ情報をお届けします。', color: 'green' },
-  { icon: '💰', title: 'コスパ・続けやすさを評価', body: '1食あたりの単価・送料・最低注文数まで細かく検証。ライフスタイルに合ったサービスを見つけるお手伝いをします。', color: 'orange' },
-];
+const starSVG = (filled: boolean) => filled
+  ? `<svg class="star" viewBox="0 0 12 12"><polygon class="star-fill" points="6,1 7.5,4.5 11,4.8 8.5,7 9.3,10.5 6,8.8 2.7,10.5 3.5,7 1,4.8 4.5,4.5"/></svg>`
+  : `<svg class="star" viewBox="0 0 12 12"><polygon class="star-empty" points="6,1 7.5,4.5 11,4.8 8.5,7 9.3,10.5 6,8.8 2.7,10.5 3.5,7 1,4.8 4.5,4.5"/></svg>`;
 ---
 
 <BaseLayout>
-  <!-- ヒーロー -->
-  <section class="hero">
-    <div class="container hero-content">
-      <div class="hero-text">
-        <span class="hero-badge">🍱 宅配食レビューブログ</span>
-        <h1>毎日の食卓を<br /><em>もっとラクに、</em><br />もっと美味しく。</h1>
-        <p class="hero-desc">共働き・育児中・時間のない30〜50代に向けて、<br class="pc-only" />宅配弁当・ミールキットを実際に使って正直レビュー。</p>
-        <div class="hero-actions">
-          <a href="/blog" class="btn btn-primary">レビューを読む →</a>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content reveal">
+      <span class="tag">宅配食レビューブログ</span>
+      <h1>毎日の食卓を<br><em>もっとラクに、</em><br>もっと美味しく。</h1>
+      <p class="hero-desc">
+        共働き・育児中・時間のない30〜50代に向けて、<br>
+        宅配弁当・ミールキットを実際に使って正直レビュー。
+      </p>
+      <a href="/blog" class="btn-primary">
+        レビューを読む
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+    <div class="hero-visual reveal" style="transition-delay:.15s">
+      <div class="hero-img-placeholder">
+        <span>宅配食のフード写真</span>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">{data.totalCount}</span>
+          <span class="stat-label">レビュー数</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">12</span>
+          <span class="stat-label">サービス比較</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">4.2</span>
+          <span class="stat-label">平均評価</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REASONS -->
+  <section class="reasons" id="about">
+    <div class="section-inner">
+      <div class="reasons-header reveal">
+        <div class="section-label">Why this blog</div>
+        <h2 class="section-title">楽食事ブログが選ばれる3つの理由</h2>
+        <p class="section-sub">実際に購入・調理・食べた上での、正直な評価だけをお届けします。</p>
+      </div>
+      <div class="reasons-grid reveal" style="transition-delay:.1s">
+        <div class="reason-card">
+          <div class="reason-num">01</div>
+          <div class="reason-bar"></div>
+          <div class="reason-title">時短</div>
+          <p class="reason-desc">忙しい日でも食卓を豊かに。調理時間・配達スピードを徹底比較し、本当に「ラクになる」サービスを厳選してご紹介します。</p>
+        </div>
+        <div class="reason-card">
+          <div class="reason-num">02</div>
+          <div class="reason-bar"></div>
+          <div class="reason-title">栄養バランス</div>
+          <p class="reason-desc">カロリー・塩分・野菜量を実食ベースで評価。子どもも食べられる内容かどうか、家族全体の視点でレビューしています。</p>
+        </div>
+        <div class="reason-card">
+          <div class="reason-num">03</div>
+          <div class="reason-bar"></div>
+          <div class="reason-title">コスパ</div>
+          <p class="reason-desc">1食あたりのコストを算出し、外食・自炊との比較も掲載。継続して使えるかどうかを長期視点で判断します。</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 特徴 -->
-  <section class="section" style="background:#fff;">
-    <div class="container">
-      <h2 class="section-title">楽食事ブログが<span>選ばれる</span>3つの理由</h2>
-      <p class="section-subtitle">本音のレビューで、あなたにぴったりの宅配食をお届けします</p>
-      <div class="features-grid">
-        {features.map(f => (
-          <div class={`feature-card feature-card--${f.color}`}>
-            <span class="feature-icon">{f.icon}</span>
-            <h3>{f.title}</h3>
-            <p>{f.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- 新着記事 -->
-  <section class="section" style="background:var(--color-orange-light);">
-    <div class="container">
-      <h2 class="section-title">新着<span>レビュー</span></h2>
-      <p class="section-subtitle">最新の正直レビューをチェックしよう</p>
-      {latestPosts.length > 0 ? (
-        <div class="articles-grid">
-          {latestPosts.map(post => (
-            <ArticleCard
-              slug={post.id}
-              title={post.title}
-              excerpt=""
-              eyecatch={post.eyecatch?.url}
-              category={post.category?.name}
-              rating={4}
-              publishedAt={post.publishedAt}
-            />
-          ))}
+  <!-- REVIEWS -->
+  <section id="reviews" class="reviews-section">
+    <div class="section-inner">
+      <div class="reviews-header reveal">
+        <div>
+          <div class="section-label">Latest Reviews</div>
+          <h2 class="section-title">新着レビュー</h2>
         </div>
-      ) : (
-        <p style="text-align:center;color:#999;">記事を準備中です。もうしばらくお待ちください。</p>
-      )}
-      <div class="view-all">
-        <a href="/blog" class="btn btn-primary">すべてのレビューを見る →</a>
+        <a href="/blog" class="link-more">
+          すべて見る
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <div class="reviews-grid reveal" style="transition-delay:.1s">
+        {posts.length > 0 ? posts.map(post => (
+          <a href={`/blog/${post.id}/`} class="review-card">
+            <div class="review-img">
+              {post.eyecatch
+                ? <img src={post.eyecatch.url} alt={post.title} />
+                : <span>{post.title}</span>
+              }
+            </div>
+            <div class="review-body">
+              <div class="review-meta">
+                {post.category && <span class="review-cat">{post.category.name}</span>}
+                <span class="review-date">{new Date(post.publishedAt).toLocaleDateString('ja-JP')}</span>
+              </div>
+              <h3 class="review-title">{post.title}</h3>
+              <div class="review-footer">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="stars">
+                    <Fragment set:html={[1,2,3,4,5].map(i => starSVG(i <= 4)).join('')} />
+                  </div>
+                  <span class="stars-label">4.0</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        )) : (
+          <p style="color:var(--text-mid);grid-column:1/-1;text-align:center;padding:3rem 0;">記事を準備中です。</p>
+        )}
       </div>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="section">
-    <div class="container">
-      <div class="cta-inner">
-        <div class="cta-text">
-          <h2>どのサービスが自分に合う？</h2>
-          <p>宅配弁当・ミールキット・ダイエット食…選び方に迷ったらレビュー一覧をチェック！</p>
-        </div>
-        <a href="/blog" class="btn btn-primary">レビューを見る →</a>
-      </div>
+  <section class="cta">
+    <div class="cta-inner reveal">
+      <div class="section-label">はじめての方へ</div>
+      <h2 class="section-title">どのサービスが自分に合う？</h2>
+      <div class="cta-divider"></div>
+      <p class="section-sub">
+        宅配弁当・ミールキット・ダイエット食…<br>
+        選び方に迷ったらレビュー一覧をチェック！
+      </p>
+      <a href="/blog" class="btn-outline">
+        レビューを見る
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+/* HERO */
 .hero {
-  padding: 5rem 0 4rem;
-  background: linear-gradient(135deg, #FFF8F4 0%, #F0FAF4 100%);
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding-top: 64px;
+  max-width: 1200px; margin: 0 auto;
+  padding-left: 48px; padding-right: 48px;
+  gap: 80px;
 }
-.hero-content { max-width: 700px; }
-.hero-badge {
+.hero-content { padding: 80px 0; }
+.tag {
   display: inline-block;
-  background: var(--color-orange-light);
-  color: var(--color-orange);
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 0.35rem 0.9rem;
-  border-radius: 100px;
-  margin-bottom: 1.25rem;
-  border: 1.5px solid rgba(230,126,34,0.3);
+  font-family: var(--sans); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--orange);
+  border: 1px solid var(--orange);
+  padding: 4px 12px; border-radius: 2px;
+  margin-bottom: 32px;
 }
-.hero-text h1 {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 700;
-  line-height: 1.35;
-  margin-bottom: 1.25rem;
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(42px, 5vw, 60px);
+  font-weight: 500; line-height: 1.35;
+  letter-spacing: -0.01em; color: var(--text);
+  margin-bottom: 28px;
 }
-.hero-text h1 em { font-style: normal; color: var(--color-orange); }
-.hero-desc { font-size: 1rem; color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.9; }
-.hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.hero h1 em { font-style: normal; color: var(--orange); }
+.hero-desc {
+  font-size: 15px; color: var(--text-mid);
+  line-height: 1.9; margin-bottom: 44px; font-weight: 300;
+}
+.hero-visual { position: relative; height: 520px; display: flex; align-items: center; justify-content: center; }
+.hero-img-placeholder {
+  width: 100%; height: 100%;
+  background: var(--bg-warm); border-radius: 4px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-family: monospace; font-size: 12px; color: var(--text-lite);
+  overflow: hidden; position: relative;
+}
+.hero-img-placeholder::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 12px, oklch(92% 0.018 72 / .5) 12px, oklch(92% 0.018 72 / .5) 13px);
+}
+.hero-img-placeholder span { position: relative; z-index: 1; background: var(--bg-warm); padding: 8px 16px; border: 1px solid var(--line); border-radius: 2px; }
+.hero-stats {
+  position: absolute; bottom: 32px; left: 24px;
+  background: #fff; border-radius: 4px;
+  padding: 20px 24px; box-shadow: 0 8px 32px oklch(0% 0 0 / .08);
+  display: flex; gap: 28px;
+}
+.stat { text-align: center; }
+.stat-num { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--orange); display: block; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 11px; color: var(--text-lite); letter-spacing: 0.06em; }
+
+/* REASONS */
+.reasons { background: var(--bg-warm); padding: 96px 48px; }
+.reasons-header { text-align: center; margin-bottom: 64px; }
+.reasons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; border: 1px solid var(--line); }
+.reason-card { background: var(--bg); padding: 52px 44px; transition: background .3s; }
+.reason-card:hover { background: #fff; }
+.reason-num { font-family: var(--serif); font-size: 48px; font-weight: 300; color: var(--line); line-height: 1; margin-bottom: 24px; }
+.reason-card:hover .reason-num { color: var(--orange-lt); }
+.reason-title { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 12px; }
+.reason-bar { width: 32px; height: 2px; background: var(--orange); margin-bottom: 16px; transition: width .3s; }
+.reason-card:hover .reason-bar { width: 52px; }
+.reason-desc { font-size: 14px; color: var(--text-mid); line-height: 1.85; font-weight: 300; }
+
+/* REVIEWS */
+.reviews-section { padding: 96px 48px; }
+.reviews-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; }
+.reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.review-card { background: var(--bg); display: flex; flex-direction: column; cursor: pointer; transition: background .25s; text-decoration: none; color: inherit; }
+.review-card:hover { background: #fff; }
+.review-img { width: 100%; height: 200px; background: var(--bg-warm); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-lite); position: relative; overflow: hidden; flex-shrink: 0; }
+.review-img img { width: 100%; height: 100%; object-fit: cover; }
+.review-img::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, transparent, transparent 10px, oklch(91% 0.018 72 / .6) 10px, oklch(91% 0.018 72 / .6) 11px); }
+.review-img img ~ * { display: none; }
+.review-img span { position: relative; z-index: 1; background: var(--bg-warm); padding: 6px 12px; border: 1px solid var(--line); }
+.review-body { padding: 28px 32px 32px; flex: 1; display: flex; flex-direction: column; }
+.review-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.review-cat { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); border: 1px solid var(--orange-lt); background: var(--orange-lt); padding: 3px 8px; border-radius: 1px; }
+.review-date { font-size: 12px; color: var(--text-lite); }
+.review-title { font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--text); line-height: 1.55; margin-bottom: 10px; }
+.review-card:hover .review-title { color: var(--orange); }
+.review-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+
+/* CTA */
+.cta { background: var(--bg-dark); padding: 96px 48px; }
+.cta-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+.cta .section-label { color: oklch(75% 0.10 55); }
+.cta .section-title { color: oklch(95% 0.012 72); }
+.cta .section-sub { color: oklch(68% 0.020 60); margin-bottom: 44px; }
+.cta-divider { width: 40px; height: 1px; background: var(--orange); margin: 24px auto; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding: 100px 24px 48px; gap: 40px; min-height: auto; }
+  .hero-visual { height: 300px; }
+  .reasons { padding: 64px 24px; }
+  .reasons-grid { grid-template-columns: 1fr; }
+  .reviews-section { padding: 64px 24px; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .cta { padding: 64px 24px; }
+}
 </style>

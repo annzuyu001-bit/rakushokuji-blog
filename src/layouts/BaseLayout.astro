@@ -1,8 +1,8 @@
 ---
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 ---
@@ -11,10 +11,30 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
   </head>
   <body>
     <Header />
     <slot />
     <Footer />
+    <script>
+      // Header scroll effect
+      const header = document.getElementById('site-header');
+      if (header) {
+        window.addEventListener('scroll', () => {
+          header.classList.toggle('scrolled', window.scrollY > 20);
+        });
+      }
+      // Scroll reveal
+      const revealEls = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(el => obs.observe(el));
+      setTimeout(() => revealEls.forEach(el => el.classList.add('visible')), 800);
+    </script>
   </body>
 </html>
