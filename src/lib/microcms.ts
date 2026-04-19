@@ -2,7 +2,7 @@ import { createClient } from 'microcms-js-sdk';
 
 export const client = createClient({
   serviceDomain: 'uzpj3q81dc',
-  apiKey: import.meta.env.MICROCMS_API_KEY,
+  apiKey: 'gkRJZrpd0NaT35zJp1BB4KwTA9qyebfG0iWK',
 });
 
 export type Blog = {
