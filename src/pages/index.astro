@@ -1,97 +1,117 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { client } from '../lib/microcms';
+import type { Blog } from '../lib/microcms';
+
+const data = await client.getList<Blog>({ endpoint: 'blogs', queries: { limit: 3 } });
+const latestPosts = data.contents;
+
+const features = [
+  { icon: '🕐', title: '時短・忙しい日でも安心', body: '献立を考えてスーパーへ行く手間がゼロに。疲れた日でも栄養バランスの整った食事がすぐ手に入ります。', color: 'orange' },
+  { icon: '🥗', title: '栄養バランスを正直比較', body: '糖質・塩分・カロリーなど各サービスの栄養面を数値付きで比較。健康管理中の方にも役立つ情報をお届けします。', color: 'green' },
+  { icon: '💰', title: 'コスパ・続けやすさを評価', body: '1食あたりの単価・送料・最低注文数まで細かく検証。ライフスタイルに合ったサービスを見つけるお手伝いをします。', color: 'orange' },
+];
 ---
 
-<!doctype html>
-<html lang="ja">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="hero">
-				<h1>共働き家庭のための<br />宅配食レビューブログ</h1>
-				<p>時短・コスパ・栄養バランスを重視した宅配食を、実際に食べて徹底レビュー。30〜50代の共働き家庭に本当に使えるサービスをお伝えします。</p>
-				<a href="/blog" class="btn">記事を読む</a>
-			</section>
-			<section class="features">
-				<div class="feature">
-					<span class="icon">⏱</span>
-					<h3>時短</h3>
-					<p>平日の食事準備をラクにする宅配食を厳選</p>
-				</div>
-				<div class="feature">
-					<span class="icon">💰</span>
-					<h3>コスパ</h3>
-					<p>送料込みの実質価格で比較・ランキング</p>
-				</div>
-				<div class="feature">
-					<span class="icon">🥗</span>
-					<h3>栄養バランス</h3>
-					<p>管理栄養士監修メニューも紹介</p>
-				</div>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BaseLayout>
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <span class="hero-badge">🍱 宅配食レビューブログ</span>
+        <h1>毎日の食卓を<br /><em>もっとラクに、</em><br />もっと美味しく。</h1>
+        <p class="hero-desc">共働き・育児中・時間のない30〜50代に向けて、<br class="pc-only" />宅配弁当・ミールキットを実際に使って正直レビュー。</p>
+        <div class="hero-actions">
+          <a href="/blog" class="btn btn-primary">レビューを読む →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特徴 -->
+  <section class="section" style="background:#fff;">
+    <div class="container">
+      <h2 class="section-title">楽食事ブログが<span>選ばれる</span>3つの理由</h2>
+      <p class="section-subtitle">本音のレビューで、あなたにぴったりの宅配食をお届けします</p>
+      <div class="features-grid">
+        {features.map(f => (
+          <div class={`feature-card feature-card--${f.color}`}>
+            <span class="feature-icon">{f.icon}</span>
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 新着記事 -->
+  <section class="section" style="background:var(--color-orange-light);">
+    <div class="container">
+      <h2 class="section-title">新着<span>レビュー</span></h2>
+      <p class="section-subtitle">最新の正直レビューをチェックしよう</p>
+      {latestPosts.length > 0 ? (
+        <div class="articles-grid">
+          {latestPosts.map(post => (
+            <ArticleCard
+              slug={post.id}
+              title={post.title}
+              excerpt=""
+              eyecatch={post.eyecatch?.url}
+              category={post.category?.name}
+              rating={4}
+              publishedAt={post.publishedAt}
+            />
+          ))}
+        </div>
+      ) : (
+        <p style="text-align:center;color:#999;">記事を準備中です。もうしばらくお待ちください。</p>
+      )}
+      <div class="view-all">
+        <a href="/blog" class="btn btn-primary">すべてのレビューを見る →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-text">
+          <h2>どのサービスが自分に合う？</h2>
+          <p>宅配弁当・ミールキット・ダイエット食…選び方に迷ったらレビュー一覧をチェック！</p>
+        </div>
+        <a href="/blog" class="btn btn-primary">レビューを見る →</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
 
 <style>
-	.hero {
-		text-align: center;
-		padding: 4rem 1rem;
-		background: linear-gradient(135deg, #fff8f0, #fff);
-	}
-	.hero h1 {
-		font-size: 2rem;
-		color: #e67e22;
-		margin-bottom: 1rem;
-		line-height: 1.4;
-	}
-	.hero p {
-		color: #555;
-		max-width: 600px;
-		margin: 0 auto 2rem;
-		line-height: 1.8;
-	}
-	.btn {
-		display: inline-block;
-		background: #e67e22;
-		color: white;
-		padding: 0.8rem 2rem;
-		border-radius: 30px;
-		text-decoration: none;
-		font-weight: bold;
-	}
-	.features {
-		display: flex;
-		gap: 2rem;
-		padding: 3rem 1rem;
-		max-width: 800px;
-		margin: 0 auto;
-		flex-wrap: wrap;
-	}
-	.feature {
-		flex: 1;
-		min-width: 200px;
-		text-align: center;
-		padding: 1.5rem;
-		background: #fff8f0;
-		border-radius: 12px;
-	}
-	.icon {
-		font-size: 2rem;
-	}
-	.feature h3 {
-		color: #e67e22;
-		margin: 0.5rem 0;
-	}
-	.feature p {
-		color: #666;
-		font-size: 0.9rem;
-	}
+.hero {
+  padding: 5rem 0 4rem;
+  background: linear-gradient(135deg, #FFF8F4 0%, #F0FAF4 100%);
+}
+.hero-content { max-width: 700px; }
+.hero-badge {
+  display: inline-block;
+  background: var(--color-orange-light);
+  color: var(--color-orange);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  margin-bottom: 1.25rem;
+  border: 1.5px solid rgba(230,126,34,0.3);
+}
+.hero-text h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 1.25rem;
+}
+.hero-text h1 em { font-style: normal; color: var(--color-orange); }
+.hero-desc { font-size: 1rem; color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.9; }
+.hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 </style>

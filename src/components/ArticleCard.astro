@@ -1,0 +1,44 @@
+---
+const { slug, title, excerpt, eyecatch, category, rating, publishedAt } = Astro.props;
+const stars = Math.round(rating);
+---
+
+<article class="article-card">
+  <a href={`/blog/${slug}/`} class="article-card-link">
+    <div class="article-card-image">
+      {eyecatch
+        ? <img src={eyecatch} alt={title} width="400" height="240" />
+        : <div class="article-card-noimage">🍱</div>
+      }
+      {category && <span class="article-card-category">{category}</span>}
+    </div>
+    <div class="article-card-body">
+      <h3 class="article-card-title">{title}</h3>
+      {excerpt && <p class="article-card-excerpt">{excerpt}</p>}
+      <div class="article-card-meta">
+        <span class="article-card-rating">
+          {'★'.repeat(stars)}{'☆'.repeat(5 - stars)}
+          <span class="rating-num">{rating}</span>
+        </span>
+        <span class="article-card-date">{new Date(publishedAt).toLocaleDateString('ja-JP')}</span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .article-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+  .article-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .article-card-link { display: block; text-decoration: none; color: inherit; }
+  .article-card-image { position: relative; aspect-ratio: 5/3; overflow: hidden; background: #f5f0eb; }
+  .article-card-image img { width: 100%; height: 100%; object-fit: cover; }
+  .article-card-noimage { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 3rem; }
+  .article-card-category { position: absolute; top: 0.75rem; left: 0.75rem; background: #e67e22; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 100px; }
+  .article-card-body { padding: 1.25rem; }
+  .article-card-title { font-size: 0.95rem; font-weight: 700; line-height: 1.5; margin: 0 0 0.5rem; color: #333; }
+  .article-card-excerpt { font-size: 0.82rem; color: #777; line-height: 1.6; margin: 0 0 0.75rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .article-card-meta { display: flex; justify-content: space-between; align-items: center; }
+  .article-card-rating { color: #f39c12; font-size: 0.85rem; }
+  .rating-num { color: #555; margin-left: 0.25rem; font-size: 0.8rem; }
+  .article-card-date { font-size: 0.75rem; color: #aaa; }
+</style>
