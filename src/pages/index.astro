@@ -6,44 +6,92 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="hero">
+				<h1>共働き家庭のための<br />宅配食レビューブログ</h1>
+				<p>時短・コスパ・栄養バランスを重視した宅配食を、実際に食べて徹底レビュー。30〜50代の共働き家庭に本当に使えるサービスをお伝えします。</p>
+				<a href="/blog" class="btn">記事を読む</a>
+			</section>
+			<section class="features">
+				<div class="feature">
+					<span class="icon">⏱</span>
+					<h3>時短</h3>
+					<p>平日の食事準備をラクにする宅配食を厳選</p>
+				</div>
+				<div class="feature">
+					<span class="icon">💰</span>
+					<h3>コスパ</h3>
+					<p>送料込みの実質価格で比較・ランキング</p>
+				</div>
+				<div class="feature">
+					<span class="icon">🥗</span>
+					<h3>栄養バランス</h3>
+					<p>管理栄養士監修メニューも紹介</p>
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 4rem 1rem;
+		background: linear-gradient(135deg, #fff8f0, #fff);
+	}
+	.hero h1 {
+		font-size: 2rem;
+		color: #e67e22;
+		margin-bottom: 1rem;
+		line-height: 1.4;
+	}
+	.hero p {
+		color: #555;
+		max-width: 600px;
+		margin: 0 auto 2rem;
+		line-height: 1.8;
+	}
+	.btn {
+		display: inline-block;
+		background: #e67e22;
+		color: white;
+		padding: 0.8rem 2rem;
+		border-radius: 30px;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	.features {
+		display: flex;
+		gap: 2rem;
+		padding: 3rem 1rem;
+		max-width: 800px;
+		margin: 0 auto;
+		flex-wrap: wrap;
+	}
+	.feature {
+		flex: 1;
+		min-width: 200px;
+		text-align: center;
+		padding: 1.5rem;
+		background: #fff8f0;
+		border-radius: 12px;
+	}
+	.icon {
+		font-size: 2rem;
+	}
+	.feature h3 {
+		color: #e67e22;
+		margin: 0.5rem 0;
+	}
+	.feature p {
+		color: #666;
+		font-size: 0.9rem;
+	}
+</style>
