@@ -35,15 +35,15 @@ const starSVG = (filled: boolean) => filled
       <div class="hero-stats">
         <div class="stat">
           <span class="stat-num">{data.totalCount}</span>
-          <span class="stat-label">レビュー数</span>
+          <span class="stat-label"><i data-lucide="file-text" style="width:12px;height:12px;stroke:var(--text-lite);stroke-width:2;fill:none;vertical-align:middle;margin-right:3px;"></i>レビュー数</span>
         </div>
         <div class="stat">
           <span class="stat-num">12</span>
-          <span class="stat-label">サービス比較</span>
+          <span class="stat-label"><i data-lucide="bar-chart-2" style="width:12px;height:12px;stroke:var(--text-lite);stroke-width:2;fill:none;vertical-align:middle;margin-right:3px;"></i>サービス比較</span>
         </div>
         <div class="stat">
           <span class="stat-num">4.2</span>
-          <span class="stat-label">平均評価</span>
+          <span class="stat-label"><i data-lucide="star" style="width:12px;height:12px;stroke:var(--text-lite);stroke-width:2;fill:none;vertical-align:middle;margin-right:3px;"></i>平均評価</span>
         </div>
       </div>
     </div>
@@ -59,20 +59,20 @@ const starSVG = (filled: boolean) => filled
       </div>
       <div class="reasons-grid reveal" style="transition-delay:.1s">
         <div class="reason-card">
+          <div class="reason-icon"><i data-lucide="timer"></i></div>
           <div class="reason-num">01</div>
-          <div class="reason-bar"></div>
           <div class="reason-title">時短</div>
           <p class="reason-desc">忙しい日でも食卓を豊かに。調理時間・配達スピードを徹底比較し、本当に「ラクになる」サービスを厳選してご紹介します。</p>
         </div>
         <div class="reason-card">
+          <div class="reason-icon"><i data-lucide="leaf"></i></div>
           <div class="reason-num">02</div>
-          <div class="reason-bar"></div>
           <div class="reason-title">栄養バランス</div>
           <p class="reason-desc">カロリー・塩分・野菜量を実食ベースで評価。子どもも食べられる内容かどうか、家族全体の視点でレビューしています。</p>
         </div>
         <div class="reason-card">
+          <div class="reason-icon"><i data-lucide="wallet"></i></div>
           <div class="reason-num">03</div>
-          <div class="reason-bar"></div>
           <div class="reason-title">コスパ</div>
           <p class="reason-desc">1食あたりのコストを算出し、外食・自炊との比較も掲載。継続して使えるかどうかを長期視点で判断します。</p>
         </div>
@@ -106,7 +106,12 @@ const starSVG = (filled: boolean) => filled
             </div>
             <div class="review-body">
               <div class="review-meta">
-                {post.category && <span class="review-cat">{post.category.name}</span>}
+                {post.category && (
+                  <span class="review-cat">
+                    <i data-lucide={post.category.name.includes('弁当') || post.category.name.includes('冷凍') ? 'box' : 'package'} style="width:12px;height:12px;stroke:var(--orange);stroke-width:2;fill:none;vertical-align:middle;margin-right:4px;"></i>
+                    {post.category.name}
+                  </span>
+                )}
                 <span class="review-date">{new Date(post.publishedAt).toLocaleDateString('ja-JP')}</span>
               </div>
               <h3 class="review-title">{post.title}</h3>
@@ -210,11 +215,16 @@ const starSVG = (filled: boolean) => filled
 .reasons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; border: 1px solid var(--line); }
 .reason-card { background: var(--bg); padding: 52px 44px; transition: background .3s; }
 .reason-card:hover { background: #fff; }
-.reason-num { font-family: var(--serif); font-size: 48px; font-weight: 300; color: var(--line); line-height: 1; margin-bottom: 24px; }
+.reason-icon {
+  width: 52px; height: 52px;
+  background: var(--orange-lt); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+}
+.reason-icon i { width: 24px; height: 24px; stroke: var(--orange); stroke-width: 1.8; }
+.reason-num { font-family: var(--serif); font-size: 48px; font-weight: 300; color: var(--line); line-height: 1; margin-bottom: 24px; letter-spacing: -0.02em; }
 .reason-card:hover .reason-num { color: var(--orange-lt); }
 .reason-title { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 12px; }
-.reason-bar { width: 32px; height: 2px; background: var(--orange); margin-bottom: 16px; transition: width .3s; }
-.reason-card:hover .reason-bar { width: 52px; }
 .reason-desc { font-size: 14px; color: var(--text-mid); line-height: 1.85; font-weight: 300; }
 
 /* REVIEWS */

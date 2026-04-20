@@ -1,14 +1,16 @@
 ---
 import '../styles/global.css';
+
+const pathname = Astro.url.pathname;
 ---
 
 <header id="site-header">
   <div class="header-inner">
     <a href="/" class="logo">楽食事ブログ</a>
     <nav>
-      <a href="/">ホーム</a>
-      <a href="/blog">記事一覧</a>
-      <a href="/about">このブログについて</a>
+      <a href="/" class={pathname === '/' ? 'active' : ''}>ホーム</a>
+      <a href="/blog" class={pathname.startsWith('/blog') ? 'active' : ''}>記事一覧</a>
+      <a href="/about" class={pathname === '/about' ? 'active' : ''}>このブログについて</a>
     </nav>
   </div>
 </header>
@@ -42,7 +44,7 @@ import '../styles/global.css';
     border-bottom: 1.5px solid transparent;
     transition: color .2s, border-color .2s;
   }
-  nav a:hover { color: var(--text); border-bottom-color: var(--orange); }
+  nav a:hover, nav a.active { color: var(--text); border-bottom-color: var(--orange); }
   @media (max-width: 720px) {
     .header-inner { padding: 0 20px; }
     nav { gap: 20px; }

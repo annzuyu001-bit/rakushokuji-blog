@@ -13,6 +13,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <BaseHead title={title} description={description} />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
   </head>
   <body>
     <Header />
@@ -35,6 +36,8 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
       }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
       revealEls.forEach(el => obs.observe(el));
       setTimeout(() => revealEls.forEach(el => el.classList.add('visible')), 800);
+      // Init Lucide icons
+      if ((window as any).lucide) (window as any).lucide.createIcons();
     </script>
   </body>
 </html>
