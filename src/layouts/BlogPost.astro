@@ -11,47 +11,68 @@ type Props = CollectionEntry<'blog'>['data'];
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="ja">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description ?? title} />
 		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
+			main { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+			.hero-image { width: 100%; border-radius: 12px; margin-bottom: 2rem; object-fit: cover; max-height: 400px; }
+			.title-block { margin-bottom: 2rem; }
+			.title-block h1 { font-size: 1.8rem; color: #333; line-height: 1.4; margin-bottom: 0.5rem; }
+			.date { color: #999; font-size: 0.85rem; }
+			.back { display: inline-block; margin-top: 2rem; color: #e67e22; text-decoration: none; }
+
+			:global(.prose) { line-height: 1.9; color: #444; font-size: 1rem; }
+			:global(.prose p) { margin: 1em 0; }
+			:global(.prose img) { max-width: 100%; border-radius: 8px; display: block; margin: 1.5em auto; }
+			:global(.prose h2) {
+				font-size: 1.4rem; font-weight: 700;
+				margin: 2.5em 0 1em; padding: 0.55em 0.9em;
+				background: #fff5ee; border-left: 5px solid #e67e22;
+				border-radius: 0 6px 6px 0; color: #333;
 			}
-			.hero-image {
-				width: 100%;
+			:global(.prose h3) {
+				font-size: 1.15rem; font-weight: 700;
+				margin: 2em 0 0.8em; padding: 0.4em 0 0.4em 0.8em;
+				border-left: 3px solid #e67e22; color: #444;
 			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
+			:global(.prose h4) { font-size: 1rem; font-weight: 700; margin: 1.5em 0 0.5em; color: #555; }
+			:global(.prose ul:not(.wp-block-list)) { margin: 1em 0 1em 0.5em; padding: 0; list-style: none; }
+			:global(.prose ul:not(.wp-block-list) li) { position: relative; padding-left: 1.5em; margin-bottom: 0.5em; }
+			:global(.prose ul:not(.wp-block-list) li::before) { content: "✔"; position: absolute; left: 0; color: #e67e22; font-size: 0.85em; top: 0.15em; }
+			:global(.prose .wp-block-list) { margin: 1em 0 1em 1.5em; padding: 0; }
+			:global(.prose .wp-block-list li) { margin-bottom: 0.5em; }
+			:global(.prose ol) { margin: 1em 0 1em 1.8em; }
+			:global(.prose ol li) { margin-bottom: 0.5em; }
+			:global(.prose blockquote) { margin: 1.5em 0; padding: 1em 1.2em; background: #f9f9f9; border-left: 4px solid #ccc; border-radius: 4px; color: #555; font-size: 0.95em; }
+			:global(.prose table) { width: 100%; border-collapse: collapse; margin: 1.5em 0; font-size: 0.95em; }
+			:global(.prose th) { background: #e67e22; color: #fff; padding: 0.6em 0.9em; text-align: left; font-weight: 700; }
+			:global(.prose td) { padding: 0.6em 0.9em; border-bottom: 1px solid #eee; vertical-align: top; }
+			:global(.prose tr:nth-child(even) td) { background: #fdf8f4; }
+			:global(.prose a) { color: #e67e22; text-decoration: underline; }
+			:global(.prose strong) { color: #c0392b; font-weight: 700; }
+			:global(.swl-marker), :global(.mark_yellow) { background: linear-gradient(transparent 60%, rgba(255,235,0,0.7) 60%); }
+			:global(.mark_red) { background: linear-gradient(transparent 60%, rgba(255,100,100,0.4) 60%); }
+			:global(.mark_green) { background: linear-gradient(transparent 60%, rgba(100,220,100,0.4) 60%); }
+			:global(.wp-block-group.is-style-box_primary) { border: 2px solid #e67e22; border-radius: 8px; padding: 1.2em 1.4em; margin: 1.5em 0; }
+			:global(.wp-block-group.is-style-box_success) { border: 2px solid #27ae60; border-radius: 8px; padding: 1.2em 1.4em; margin: 1.5em 0; }
+			:global(.wp-block-group.is-style-box_alert) { border: 2px solid #e74c3c; border-radius: 8px; padding: 1.2em 1.4em; margin: 1.5em 0; }
+			:global(.has-swl-pale-01-background-color) { background: #fff8f0; }
+			:global(.has-swl-pale-02-background-color) { background: #f0fff4; }
+			:global(.has-swl-pale-03-background-color) { background: #fff0f0; }
+			:global(.wp-block-buttons) { display: flex; justify-content: center; margin: 1.5em 0; }
+			:global(.wp-block-button a) { display: inline-block; padding: 0.7em 2em; background: #e67e22; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 700; font-size: 1rem; }
+			:global(.wp-block-button.is-style-btn_outline a) { background: transparent; border: 2px solid #e67e22; color: #e67e22; }
+			:global(.c-balloon) { display: flex; align-items: flex-start; gap: 12px; margin: 1.5em 0; }
+			:global(.c-balloon.-bln-right) { flex-direction: row-reverse; }
+			:global(.c-balloon__icon) { flex-shrink: 0; width: 64px; text-align: center; }
+			:global(.c-balloon__iconImg) { width: 64px !important; height: 64px !important; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto; }
+			:global(.c-balloon__body) { position: relative; flex: 1; background: #f0f0f0; border-radius: 12px; padding: 0.8em 1em; }
+			:global(.c-balloon[data-col="blue"] .c-balloon__body) { background: #e8f4fd; }
+			:global(.c-balloon[data-col="red"] .c-balloon__body) { background: #fdecea; }
+			:global(.c-balloon[data-col="green"] .c-balloon__body) { background: #e8f8e8; }
+			:global(.c-balloon[data-col="yellow"] .c-balloon__body) { background: #fffde7; }
+			:global(.c-balloon__text) { font-size: 0.95rem; line-height: 1.7; }
 		</style>
 	</head>
 
@@ -59,26 +80,15 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+				{heroImage && <Image class="hero-image" width={1020} height={510} src={heroImage} alt={title} />}
+				<div class="title-block">
+					<h1>{title}</h1>
+					<p class="date"><FormattedDate date={pubDate} /></p>
 				</div>
 				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
 					<slot />
 				</div>
+				<a class="back" href="/blog">← 記事一覧へ戻る</a>
 			</article>
 		</main>
 		<Footer />

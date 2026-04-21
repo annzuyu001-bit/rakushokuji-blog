@@ -3,11 +3,11 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
-import { client } from '../../lib/microcms';
-import type { Blog } from '../../lib/microcms';
+import { getCollection } from 'astro:content';
 
-const data = await client.getList<Blog>({ endpoint: 'blogs' });
-const posts = data.contents;
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 ---
 
 <!doctype html>
@@ -35,11 +35,11 @@ const posts = data.contents;
 				{posts.map((post) => (
 					<li>
 						<a href={`/blog/${post.id}/`}>
-							{post.eyecatch && (
-								<img src={post.eyecatch.url} alt={post.title} />
+							{post.data.heroImage && (
+								<img src={post.data.heroImage.src} alt={post.data.title} />
 							)}
-							<h4 class="title">{post.title}</h4>
-							<p class="date">{new Date(post.publishedAt).toLocaleDateString('ja-JP')}</p>
+							<h4 class="title">{post.data.title}</h4>
+							<p class="date">{post.data.pubDate.toLocaleDateString('ja-JP')}</p>
 						</a>
 					</li>
 				))}
